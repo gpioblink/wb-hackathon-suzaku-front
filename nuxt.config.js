@@ -1,6 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 
-const environment = process.env.NODE_ENV || "development"
+const environment = process.env.NODE_ENV || "local"
 const env = require(`./env/${environment}.ts`)
 
 export default {
