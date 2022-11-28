@@ -150,7 +150,7 @@
         id: "1",
         icon: "mdi-cat",
         name: "鈴木さん",
-        isCalling: true,
+        isCalling: false,
         isDialogOpen: false,
         meetingURL: "https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fmeetup-join%2F19%3Ameeting_MmY1ZWE1NWMtN2ZiZi00ZmI0LWFiODItMmIwNzdkNTJjNDQ5%40thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%25224617a0ae-1a92-4482-a833-7bad535b3292%2522%252c%2522Oid%2522%253a%25226c873a17-3b3a-48d7-8fc2-3a82917a84c3%2522%257d%26anon%3Dtrue&type=meetup-join&deeplinkId=bbb84715-b586-4ca7-a4d6-49b01da99fcb&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true"
       }
@@ -166,5 +166,22 @@
       // リンクを新しいタブで開く
       window.open(friend.meetingURL, '_blank')
     }
+
+    async updateNotification() {
+      for(let i = 0; i < this.friends.length; ++i) {
+        // 全てのidに対してベルの状況を見て、鳴ってたらフロントに反映
+        const res = await axios.get(`${this.host}/${this.friends[i].id}/call`);
+        this.friends[i].isCalling = res.data.flag;
+        console.log(res.data);
+      }
+    }
+
+    async mounted() {
+      setInterval( () => {
+        this.updateNotification();
+      }
+      , 1000);
+    }
+
   }
 </script>
