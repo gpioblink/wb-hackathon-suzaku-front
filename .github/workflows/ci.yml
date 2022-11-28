@@ -23,6 +23,8 @@ jobs:
           yarn
           yarn ci
           ls -la
+        env:
+          NODE_ENV: production
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
