@@ -5,7 +5,7 @@
         現在別のジョブが実行中のためジョブを作成できません。終了までお待ちください。
       </v-alert>
     </v-col>-->
-    <v-col cols="8">
+    <v-col cols="12" lg="8">
       <v-card>
         <v-card-title class="headline">
          フレンドリスト
@@ -40,6 +40,7 @@
 
             <v-list-item-action>
                 <v-icon v-if="friend.isCalling" color="orange lighten-1">mdi-bell-ring</v-icon>
+                <v-icon v-else-if="isInitial" color="gray lighten-1">mdi-vanish</v-icon>
                 <v-icon v-else color="gray lighten-1">mdi-bell-outline</v-icon>
             </v-list-item-action>
           </v-list-item>
@@ -137,6 +138,7 @@
   @Component // <- 1
   export default class Beta extends Vue /* <- 2 */{
     private host:string = "http://192.168.0.18";
+    private isInitial:boolean = true;
     private friends:FriendData[] = [
       {
         id: "1",
@@ -174,7 +176,14 @@
         this.friends[i].isCalling = res.data.flag;
         console.log(res.data);
       }
+      this.isInitial = false;
     }
+
+    // checkMeetingFinished() {
+    //   if (!document.hidden) {
+        
+    //   }
+    // }
 
     async mounted() {
       setInterval( () => {
