@@ -1,6 +1,6 @@
-# stock-search-go-front
+# ハッカソン用GUI
 
-本在庫検索システム
+テストプログラム
 
 ## Build Setup
 

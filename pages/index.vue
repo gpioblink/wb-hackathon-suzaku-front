@@ -20,45 +20,27 @@
           two-line
         >
 
-          <v-list-item link @click.stop="dialog_a = true">
+          <v-list-item link 
+            v-for="friend in friends"
+            :key="friend.title"
+            @click.stop="friend.isDialogOpen = true"
+          >
             <v-list-item-avatar>
               <v-icon
                 class="grey lighten-1"
                 dark
+                v-text="friend.icon"
               >
-                mdi-flower
               </v-icon>
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title>山田さん</v-list-item-title>
-
-              <!-- <v-list-item-subtitle></v-list-item-subtitle> -->
+              <v-list-item-title v-text="friend.name"></v-list-item-title>
             </v-list-item-content>
 
             <v-list-item-action>
-                <v-icon color="gray lighten-1">mdi-bell-outline</v-icon>
-            </v-list-item-action>
-          </v-list-item>
-
-          <v-list-item link @click.stop="dialog_b = true">
-            <v-list-item-avatar>
-              <v-icon
-                class="grey lighten-1"
-                dark
-              >
-                mdi-cat
-              </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title>鈴木さん</v-list-item-title>
-
-              <!-- <v-list-item-subtitle></v-list-item-subtitle> -->
-            </v-list-item-content>
-
-            <v-list-item-action>
-                <v-icon color="orange lighten-1">mdi-bell-ring</v-icon>
+                <v-icon v-if="friend.isCalling" color="orange lighten-1">mdi-bell-ring</v-icon>
+                <v-icon v-else color="gray lighten-1">mdi-bell-outline</v-icon>
             </v-list-item-action>
           </v-list-item>
 
@@ -68,9 +50,10 @@
       </v-card>
     </v-col>
 
+    <!-- TODO: ダイアログもちゃんとfriend配列読んでまともにやるなりする -->
+
     <v-dialog
-      v-model="dialog_a"
-      persistent
+      v-model="friends[0].isDialogOpen"
       max-width="600"
     >
       <v-card>
@@ -83,14 +66,14 @@
           <v-btn
             color="gray darken-1"
             text
-            @click="dialog_a = false"
+            @click="friends[0].isDialogOpen = false"
           >
             キャンセル
           </v-btn>
           <v-btn
             color="blue darken-1"
             outlined
-            @click="dialog_a = false"
+            @click="friends[0].isDialogOpen = false"
           >
             始める
           </v-btn>
@@ -100,8 +83,7 @@
 
 
     <v-dialog
-      v-model="dialog_b"
-      persistent
+      v-model="friends[1].isDialogOpen"
       max-width="600"
     >
       <v-card>
@@ -114,24 +96,22 @@
           <v-btn
             color="gray darken-1"
             text
-            @click="dialog_b = false"
+            @click="friends[1].isDialogOpen = false"
           >
             キャンセル
           </v-btn>
           <v-btn
             color="blue darken-1"
             outlined
-            @click="dialog_b = false"
+            @click="friends[1].isDialogOpen = false"
           >
             始める
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </v-row>
-
-
-
 </template>
 
 <script lang="ts">
@@ -141,16 +121,38 @@
   type FriendData = {
     id: string,
     name: string,
+    icon: string,
     isCalling: boolean,
     isDialogOpen: boolean
   }
+
+  // バックエンドURL
+  // host: 192.168.0.18
+  // エンドポイント: /:id/led, /:id/call
+  // これらに必要なときにPOSTして、常にGETでpolling
+  // {"flag": false}
+  // LEDにPOSTを送る
 
   @Component // <- 1
   export default class Beta extends Vue /* <- 2 */{
     private valid = true;
     private queryRaw = "";
-    private dialog_a:boolean = false;
-    private dialog_b:boolean = false;
+    private friends:FriendData[] = [
+      {
+        id: "1",
+        icon: "mdi-flower",
+        name: "山田さん",
+        isCalling: false,
+        isDialogOpen: false
+      },
+      {
+        id: "1",
+        icon: "mdi-cat",
+        name: "鈴木さん",
+        isCalling: true,
+        isDialogOpen: false
+      }
+    ];
 
     async sendQueries() {
       // await axios.post(`https://192.168.0.13/${this.queryRaw}`);
@@ -160,5 +162,7 @@
     moveToDetailPage(id: string) {
       this.$router.push({path: `/detail/${id}`})
     }
+
+
   }
 </script>
