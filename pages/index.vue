@@ -59,7 +59,7 @@
     >
       <v-card>
         <v-card-title class="text-h5">
-          山田さんとのビデオチャットを開始しますか?
+          {{friends[0].name}}とのビデオチャットを開始しますか?
         </v-card-title>
         <v-card-text>始めると相手側の人形に、光と振動で開始を通知します。</v-card-text>
         <v-card-actions>
@@ -89,7 +89,7 @@
     >
       <v-card>
         <v-card-title class="text-h5">
-          鈴木さんとのビデオチャットを開始しますか?
+          {{friends[1].name}}とのビデオチャットを開始しますか?
         </v-card-title>
         <v-card-text>始めると相手側の人形に、光と振動で開始を通知します。</v-card-text>
         <v-card-actions>
