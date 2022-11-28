@@ -139,7 +139,7 @@
 
   @Component // <- 1
   export default class Beta extends Vue /* <- 2 */{
-    private host:string = (environment !== "development") ? "http://192.168.0.18" : "https://34c6-114-177-48-9.jp.ngrok.io";
+    private host:string = "https://34c6-114-177-48-9.jp.ngrok.io";
     private isInitial:boolean = true;
     private lastOpenedMeetingId:string = "";
     private friends:FriendData[] = [
