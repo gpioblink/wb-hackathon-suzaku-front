@@ -139,6 +139,7 @@
   export default class Beta extends Vue /* <- 2 */{
     private host:string = "http://192.168.0.18";
     private isInitial:boolean = true;
+    private lastOpenedMeetingId:string = "";
     private friends:FriendData[] = [
       {
         id: "1",
@@ -165,8 +166,11 @@
       // LEDを光らせる
       await axios.post(`${this.host}/${friend.id}/led`);
 
+      // 会議終了検知を登録する
+      this.lastOpenedMeetingId = friend.id;
+
       // リンクを新しいタブで開く
-      window.open(friend.meetingURL, '_blank')
+      window.open(friend.meetingURL, '_blank');
     }
 
     async updateNotification() {
@@ -179,15 +183,19 @@
       this.isInitial = false;
     }
 
-    // checkMeetingFinished() {
-    //   if (!document.hidden) {
-        
-    //   }
-    // }
+    async checkMeetingFinished() {
+      if (this.lastOpenedMeetingId !== "" && !document.hidden) {
+        // LEDをオフにする
+        await axios.post(`${this.host}/${this.lastOpenedMeetingId}/led`, { flag: false });
+        console.log(`meeting id ${this.lastOpenedMeetingId} has closed.`);
+        this.lastOpenedMeetingId = "";
+      }
+    }
 
     async mounted() {
       setInterval( () => {
         this.updateNotification();
+        this.checkMeetingFinished();
       }
       , 1000);
     }
