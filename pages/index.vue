@@ -73,7 +73,7 @@
           <v-btn
             color="blue darken-1"
             outlined
-            @click="friends[0].isDialogOpen = false"
+            @click="startMeeting(friends[0]);friends[0].isDialogOpen = false"
           >
             始める
           </v-btn>
@@ -103,7 +103,7 @@
           <v-btn
             color="blue darken-1"
             outlined
-            @click="friends[1].isDialogOpen = false"
+            @click="startMeeting(friends[1]);friends[1].isDialogOpen = false"
           >
             始める
           </v-btn>
@@ -123,7 +123,8 @@
     name: string,
     icon: string,
     isCalling: boolean,
-    isDialogOpen: boolean
+    isDialogOpen: boolean,
+    meetingURL: string
   }
 
   // バックエンドURL
@@ -135,34 +136,35 @@
 
   @Component // <- 1
   export default class Beta extends Vue /* <- 2 */{
-    private valid = true;
-    private queryRaw = "";
+    private host:string = "http://192.168.0.18";
     private friends:FriendData[] = [
       {
         id: "1",
         icon: "mdi-flower",
         name: "山田さん",
         isCalling: false,
-        isDialogOpen: false
+        isDialogOpen: false,
+        meetingURL: "https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fmeetup-join%2F19%3Ameeting_YWQwOGFkZjItODAxZC00ODJjLWI5YzktNDFiZmI1ZWEwYWNl%40thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%25224617a0ae-1a92-4482-a833-7bad535b3292%2522%252c%2522Oid%2522%253a%25226c873a17-3b3a-48d7-8fc2-3a82917a84c3%2522%257d%26anon%3Dtrue&type=meetup-join&deeplinkId=8fd865ef-2a91-4739-91a5-a6e2533ddef4&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true"
       },
       {
         id: "1",
         icon: "mdi-cat",
         name: "鈴木さん",
         isCalling: true,
-        isDialogOpen: false
+        isDialogOpen: false,
+        meetingURL: "https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fmeetup-join%2F19%3Ameeting_MmY1ZWE1NWMtN2ZiZi00ZmI0LWFiODItMmIwNzdkNTJjNDQ5%40thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%25224617a0ae-1a92-4482-a833-7bad535b3292%2522%252c%2522Oid%2522%253a%25226c873a17-3b3a-48d7-8fc2-3a82917a84c3%2522%257d%26anon%3Dtrue&type=meetup-join&deeplinkId=bbb84715-b586-4ca7-a4d6-49b01da99fcb&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true"
       }
     ];
 
-    async sendQueries() {
-      // await axios.post(`https://192.168.0.13/${this.queryRaw}`);
-      this.moveToDetailPage(this.queryRaw);
+    async startMeeting(friend: FriendData) {
+      // ベルをオフにする
+      await axios.post(`${this.host}/${friend.id}/call`, { flag: false });
+
+      // LEDを光らせる
+      await axios.post(`${this.host}/${friend.id}/led`);
+
+      // リンクを新しいタブで開く
+      window.open(friend.meetingURL, '_blank')
     }
-
-    moveToDetailPage(id: string) {
-      this.$router.push({path: `/detail/${id}`})
-    }
-
-
   }
 </script>
