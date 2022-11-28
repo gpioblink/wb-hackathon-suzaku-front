@@ -147,7 +147,7 @@
         meetingURL: "https://teams.microsoft.com/dl/launcher/launcher.html?url=%2F_%23%2Fl%2Fmeetup-join%2F19%3Ameeting_YWQwOGFkZjItODAxZC00ODJjLWI5YzktNDFiZmI1ZWEwYWNl%40thread.v2%2F0%3Fcontext%3D%257b%2522Tid%2522%253a%25224617a0ae-1a92-4482-a833-7bad535b3292%2522%252c%2522Oid%2522%253a%25226c873a17-3b3a-48d7-8fc2-3a82917a84c3%2522%257d%26anon%3Dtrue&type=meetup-join&deeplinkId=8fd865ef-2a91-4739-91a5-a6e2533ddef4&directDl=true&msLaunch=true&enableMobilePage=true&suppressPrompt=true"
       },
       {
-        id: "1",
+        id: "2",
         icon: "mdi-cat",
         name: "鈴木さん",
         isCalling: false,
