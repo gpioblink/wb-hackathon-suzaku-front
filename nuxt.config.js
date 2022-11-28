@@ -1,10 +1,16 @@
 import colors from 'vuetify/es5/util/colors'
 
-export default {
-  BASE_URL: '/',
+const environment = process.env.NODE_ENV || 'local'
+const env = require(`./env/${environment}.ts`)
 
+export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
+
+  // For Deploy: https://qiita.com/Ancient_Scapes/items/fe18bae043e4d35f1e39
+  router: {
+    base: env.BASE_URL  
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
