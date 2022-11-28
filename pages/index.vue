@@ -164,7 +164,7 @@
       await axios.post(`${this.host}/${friend.id}/call`, { flag: false });
 
       // LEDを光らせる
-      await axios.post(`${this.host}/${friend.id}/led`);
+      await axios.post(`${this.host}/${friend.id}/led`, { flag: true });
 
       // 会議終了検知を登録する
       this.lastOpenedMeetingId = friend.id;
@@ -174,11 +174,13 @@
     }
 
     async updateNotification() {
-      for(let i = 0; i < this.friends.length; ++i) {
-        // 全てのidに対してベルの状況を見て、鳴ってたらフロントに反映
-        const res = await axios.get(`${this.host}/${this.friends[i].id}/call`);
-        this.friends[i].isCalling = res.data.flag;
-        console.log(res.data);
+      if(this.lastOpenedMeetingId === "") { // 会議を開いている間はバックエンド通信を止める
+        for(let i = 0; i < this.friends.length; ++i) {
+          // 全てのidに対してベルの状況を見て、鳴ってたらフロントに反映
+          const res = await axios.get(`${this.host}/${this.friends[i].id}/call`);
+          this.friends[i].isCalling = res.data.flag;
+          console.log(res.data);
+        }
       }
       this.isInitial = false;
     }
